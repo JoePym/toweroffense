@@ -1,0 +1,15 @@
+#container
+  #map
+    .images
+      = image_tag "stone-1.png"
+      = image_tag "dirt.png"
+      = image_tag "wizard.png"
+      = image_tag "destruction.png"
+    %canvas
+  .buttons
+    = link_to "Move", "#", :id => "move"
+    - @player.cards.each do |card|
+      - if card.legendary?
+        = link_to card.name, "#", :id => "card_#{card.id}", :class => "spell", :style => "display:none"
+      - else
+        = link_to card.name, "#", :id => "card_#{card.id}", :class => "spell"
