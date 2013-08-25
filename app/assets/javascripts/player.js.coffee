@@ -38,7 +38,11 @@ class Player
   validSquares: (range) ->
     index = @square
     min = Math.max(index - range, 0)
-    @game.squareList[(min)..(index + range - 1)]
+    max = (index + range - 1)
+    for monster in (@game.monsters.filter (monster) -> !monster.dead)
+      if monster.square < max
+        max = monster.square
+    squares = @game.squareList[min..max]
 
   squareObj: ->
     @game.squareList[@square - 1]

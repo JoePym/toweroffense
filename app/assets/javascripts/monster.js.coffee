@@ -23,13 +23,14 @@ class Monster
     ,(2/monster.moveDistance)*5000
 
   move:(monster) ->
-    game = window.current_game
-    if monster.square - 1 == game.player.square
-      monster.attack()
-    else
-      monster.square = monster.square - 1
-    game.draw()
-    monster.setMoveTimer(monster)
+    unless monster.dead
+      game = window.current_game
+      if monster.square - 1 == game.player.square
+        monster.attack()
+      else
+        monster.square = monster.square - 1
+      game.draw()
+      monster.setMoveTimer(monster)
 
   squareObj: ->
     @game.squareList[@square - 1]
@@ -44,6 +45,5 @@ class Monster
   die: ->
     @square = null
     window.clearInterval(@timer) if @timer
-    @game.monsters = @game.monsters.filter (m) -> this isnt m
 
 window.Monster = Monster

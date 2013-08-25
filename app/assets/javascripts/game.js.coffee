@@ -44,23 +44,24 @@ class Game
   spawnWave: () ->
     game = window.current_game
     game.wave += 1
-    monsterEntranceSquare = game.squareList[game.squareList.length - 1]
-    bossPresent = false
+    monsterTemplates = []
+    sc = game.squareList.length
+    monsterEntranceSquares = game.squareList[(sc - 4)..(sc - 1)]
     for template in game.monsterTemplates
       number = 0
-      if template.difficulty > 2 && @wave % 5 == 0
-        unless @bossPresent
-          number = Math.floor(Math.random(1))
-          bossPresent = true if number > 0
+      if template.difficulty > 2 && @wave % 5 == 0 && @wave > 0
+        number = 1
       else if template.difficulty == 2
-        number = Math.ceil(Math.random(3))
-      else
-        number = Math.ceil(Math.random(6))
+        number = Math.floor(Math.random()*@wave)
+      else if template.difficulty == 1
+        number = Math.floor(Math.random()*@wave*2) + 1
       if number > 0
         for n in [1..number]
-          monster = new Monster(template, game)
-          game.monsters.push(monster)
-          monster.spawn(monsterEntranceSquare)
+          monsterTemplates.push(template)
+    for template, n in monsterTemplates
+      monster = new Monster(template, game)
+      game.monsters.push(monster)
+      monster.spawn(monsterEntranceSquares[n %3])
     game.draw()
 
 
@@ -96,11 +97,12 @@ class Game
             @ctx.drawImage(images[2],x*50, y*50)
         else
           @ctx.drawImage(images[0],x*50,y*50)
+    @monsters = @monsters.filter (monster) -> !monster.dead
+    deadMonsters = @monsters.filter (monster) -> monster.dead
     for monster in @monsters
-      if monster.dead
-        monster.die()
-      else
-        @ctx.drawImage(images[3], (monster.squareObj().x - 1)*50, (monster.squareObj().y - 1)*50)
+      @ctx.drawImage(images[3], (monster.squareObj().x - 1)*50, (monster.squareObj().y - 1)*50)
+    for deadmonster in deadMonsters
+      deadmonster.die()
     @currentHighlight.call() if @currentHighlight
 
   moveHighlight: () ->
