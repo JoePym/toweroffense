@@ -6,6 +6,7 @@ class Monster
     @id = monster.id
     @damage = monster.damage
     @hp = monster.hp
+    @dead = false
     @moveDistance = monster.move
     @difficulty = monster.difficulty
     @square = null
@@ -19,17 +20,11 @@ class Monster
   setMoveTimer:(monster) ->
     monster.timer = window.setTimeout ->
       monster.move(monster)
-    ,(2/monster.moveDistance)*10000
+    ,(2/monster.moveDistance)*5000
 
   move:(monster) ->
     game = window.current_game
-    game.monsterMap[monster.squareObj().x][monster.squareObj().y] = null
     monster.square = monster.square - 1
-    x = monster.squareObj().x
-    y = monster.squareObj().y
-    unless $.isArray(game.monsterMap[x])
-      game.monsterMap[x] = []
-    game.monsterMap[x][y] = monster
     console.log(monster.name + " is moving to " +monster.square)
     if @square == game.player.square
       monster.attack()
@@ -40,12 +35,11 @@ class Monster
     @game.squareList[@square - 1]
 
   attack: ->
-    console.log("NOM")
     window.current_game.player.inflict(@damage)
 
   inflict: (damage) ->
     @hp -= damage
-    @die if @hp <= 0
+    @dead = true if @hp <= 0
 
   die: ->
     @square = null

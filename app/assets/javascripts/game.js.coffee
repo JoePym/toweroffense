@@ -12,7 +12,6 @@ class Game
     @monsters = []
     @monsterTimer = null
     @currentHighlight = null
-    @monsterMap = []
     @wave = 0
 
   setupHandlers: () ->
@@ -28,7 +27,7 @@ class Game
         else
           card.highlight(this)
 
-    $(@map).on 'click', (e) =>
+    $('body').on 'click', '#map canvas', (e) =>
       @currentHighlight = null
       e.preventDefault()
       switch @waiting_click
@@ -36,16 +35,16 @@ class Game
           @player.move(e)
         when "spell"
           @activeCard.cast(e)
+      @activeCard = null
       @draw()
 
   spawnMonsters: () ->
-    @monsterTimer = window.setInterval(@spawnWave, 10000)
+    @monsterTimer = window.setInterval(@spawnWave, 100000)
 
   spawnWave: () ->
     game = window.current_game
     game.wave += 1
     monsterEntranceSquare = game.squareList[game.squareList.length - 1]
-    console.log(monsterEntranceSquare)
     bossPresent = false
     for template in game.monsterTemplates
       number = 0
@@ -62,13 +61,6 @@ class Game
           monster = new Monster(template, game)
           game.monsters.push(monster)
           monster.spawn(monsterEntranceSquare)
-          x = monster.squareObj().x
-          y = monster.squareObj().y
-          unless $.isArray(game.monsterMap[x])
-            game.monsterMap[x] = []
-          unless $.isArray(game.monsterMap[x][y])
-            game.monsterMap[x][y] = []
-          game.monsterMap[x][y].push(monster)
     game.draw()
 
 
@@ -86,13 +78,13 @@ class Game
     @ctx.clearRect(0, 0, width, height)
     uris = (image.src for image in images)
     if @preloaded
-      @drawGrid(callback, images)
+      @drawGrid(images)
     else
       $.promises.preloadImages(uris).done =>
         @preloaded = true
-        @drawGrid(callback, images)
+        @drawGrid(images)
 
-  drawGrid: (callback, images) ->
+  drawGrid: (images) ->
     for y in [(@map.height/50)..0]
       for x in [(@map.width/50)..0]
         if @squares[x] && @squares[x][y]
@@ -102,12 +94,13 @@ class Game
             @ctx.drawImage(images[1],x*50,y*50)
           if @player.square == @squares[x][y]
             @ctx.drawImage(images[2],x*50, y*50)
-          # console.log(@monsterMap[x])
-          if @monsterMap[x] && @monsterMap[x][y]
-            console.log(@monsterMap[x][y])
-            @ctx.fillText(@monsterMap[x][y].name,x*50, y*50)
         else
           @ctx.drawImage(images[0],x*50,y*50)
+    for monster in @monsters
+      if monster.dead
+        monster.die()
+      else
+        @ctx.drawImage(images[3], (monster.squareObj().x - 1)*50, (monster.squareObj().y - 1)*50)
     @currentHighlight.call() if @currentHighlight
 
   moveHighlight: () ->
@@ -115,7 +108,6 @@ class Game
 
   highlight: (color, toHighlight, eventName) ->
     @currentHighlight = =>
-      @activeCard = null
       $('#map').removeClass()
       $("#map").addClass(eventName)
       @waiting_click = eventName

@@ -65,10 +65,10 @@ while dir != 'e'
 end
 
 Monster.destroy_all
-Monster.create(:name => "Goblin", :hp => 1, :damage => 10, :move => 2, :difficulty => 1)
-Monster.create(:name => "Orc", :hp => 2, :damage => 20, :move => 2, :difficulty => 1)
-Monster.create(:name => "Harpy", :hp => 2, :damage => 25, :move => 4, :difficulty => 2)
-Monster.create(:name => "Balrog", :hp => 10, :damage => 80, :move => 4, :difficulty => 10)
+Monster.create(:name => "Goblin", :hp => 1, :damage => 10, :move => 4, :difficulty => 1)
+Monster.create(:name => "Orc", :hp => 2, :damage => 20, :move => 3, :difficulty => 1)
+Monster.create(:name => "Troll", :hp => 3, :damage => 25, :move => 2, :difficulty => 2)
+Monster.create(:name => "Balrog", :hp => 10, :damage => 80, :move => 1, :difficulty => 10)
 
 
 Player.first.cards << Card.all

@@ -38,6 +38,20 @@ class Card
   cast: (e) ->
     square = @player.game.getSquare(e) if e
     return if $.inArray(square, @validTargets()) == -1 && @range != 0
+    monstersHit = (monster for monster in @player.game.monsters when monster.squareObj() is square)
+    console.log $.isArray(monstersHit)
+    console.log(@card_type)
+    switch @card_type
+      when "heal"
+        @player.health = @player.health + @rating
+      when "shield"
+        @player.shield = @rating
+      when 'damage'
+        console.log(monstersHit)
+        if $.isArray(monstersHit)
+          for monster in monstersHit
+            console.log("boom: " + monster.name)
+            monster.inflict(@rating)
     console.log("Cast spell " + @name)
 
 window.Card = Card
