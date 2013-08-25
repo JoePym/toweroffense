@@ -17,14 +17,14 @@ Card.create!(rating: 4, width: 1, cost: 80, range: 4, card_type: 'blast', name: 
 
 Card.create!(rating: 400, width: 0, cost:0, range: 0, card_type: 'shield', name: "Titan", :legendary => true)
 Card.create!(rating: 1, width: 50, cost: 0, range: 100, card_type: 'slow', name: 'Entanglement', :legendary => true)
-Card.create!(rating: 100, width: 0, cost: 0, range: 0, :card_type => "heal", name: "Nuture", :legendary => true)
+Card.create!(rating: 200, width: 0, cost: 0, range: 0, :card_type => "boost", name: "Nuture", :legendary => true)
 
 Card.create!(rating: 100, width: 0, cost: 0, range: 8, :card_type => "damage", name: "Slay", :legendary => true)
 Card.create!(rating: 5, width: 100, cost: 0, range: 100, :card_type => "blast", name: "Earthquake", :legendary => true)
 Card.create!(rating: 20, width: 5, cost: 0, range: 5, :card_type => "blast", name: "Caldera", :legendary => true)
 Card.create!(rating: 60, width: 0, cost: 0, range: 5, :card_type => "line", name: "Odin's Call", :legendary => true)
 Card.create!(rating: 100, width: 0, cost: 0, range: 5, :card_type => "blast", name: "Nightmare", :legendary => true)
-Card.create!(rating: 10, width: 0, cost: 0, range: 10, :card_type => "move", name: "Displacement", :legendary => true)
+Card.create!(rating: 500, width: 0, cost: 0, range: 0, :card_type => "boost", name: "Diva", :legendary => true)
 Card.create!(rating: 2, width: 10, cost: 0, range: 100, :card_type => "slow", name: "Slow", :legendary => true)
 
 Square.destroy_all
@@ -53,8 +53,8 @@ end
 Monster.destroy_all
 Monster.create(:name => "Goblin", :hp => 1, :damage => 10, :move => 4, :difficulty => 1)
 Monster.create(:name => "Orc", :hp => 2, :damage => 20, :move => 3, :difficulty => 1)
-Monster.create(:name => "Troll", :hp => 10, :damage => 25, :move => 2, :difficulty => 2)
-Monster.create(:name => "Balrog", :hp => 50, :damage => 80, :move => 8, :difficulty => 10)
+Monster.create(:name => "Troll", :hp => 8, :damage => 25, :move => 2, :difficulty => 2)
+Monster.create(:name => "Balrog", :hp => 12, :damage => 80, :move => 8, :difficulty => 10)
 
 
 Player.first.cards << Card.all

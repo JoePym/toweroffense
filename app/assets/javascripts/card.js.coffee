@@ -59,6 +59,9 @@ class Card
         newHp = Math.min(100, @player.health + @rating)
         @player.health = newHp
         $('.buttons .health').text(@player.health)
+      when "boost"
+        @player.health = @rating
+        $('.buttons .health').text(@player.health)
       when "shield"
         @player.shield = @rating
         $('.buttons .shield').text(@player.shield)
