@@ -38,6 +38,7 @@ class Card
   cast: (e) ->
     square = @player.game.getSquare(e) if e
     return if $.inArray(square, @validTargets()) == -1 && @range != 0
+    return if @player.power < @cost
     monstersHit = []
     if @width
       max = Math.min(square.index + @width, @player.game.squareList.length)
@@ -48,12 +49,16 @@ class Card
     for square in squares
       for monster in @player.game.monsters when monster.squareObj() is square
         monstersHit.push(monster) if monster
-    console.log(monstersHit)
+    @player.power = @player.power - @cost
+    $('.buttons .power').text(@player.power)
     switch @card_type
       when "heal"
-        @player.health = @player.health + @rating
+        newHp = Math.min(100, @player.health + @rating)
+        @player.health = newHp
+        $('.buttons .health').text(@player.health)
       when "shield"
         @player.shield = @rating
+        $('.buttons .shield').text(@player.shield)
       when "speed"
         @player.moveDistance = @player.moveDistance + @rating
       when "slow"
@@ -67,5 +72,5 @@ class Card
       when 'blast'
         for monster in monstersHit
           monster.inflict(@rating)
-
+    console.log("Cast #{@name}")
 window.Card = Card

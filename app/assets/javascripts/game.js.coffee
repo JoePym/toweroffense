@@ -3,7 +3,7 @@ class Game
     @squares = []
     @player = new Player(this)
     @map = $("#map canvas")[0]
-    @map.width = 1000
+    @map.width = 600
     @map.height = 600
     @squareList = []
     @setupHandlers()
@@ -18,9 +18,9 @@ class Game
     $('body').on 'click', '#move', (e) =>
       e.preventDefault()
       @moveHighlight()
-    $('body').on 'click', '.spell', (e) =>
+    $('body').on 'click', 'a.spell', (e) =>
       e.preventDefault()
-      cardId = e.target.id.replace("card_", '')*1
+      cardId = $(e.target).parents('a.spell').attr('id').replace("card_", '')*1
       for card in @player.deck when card.id == cardId
         if card.range == 0
           card.cast()
@@ -41,7 +41,10 @@ class Game
       @draw()
 
   spawnMonsters: () ->
-    @monsterTimer = window.setInterval(@spawnWave, 100000)
+    @monsterTimer = window.setInterval(->
+      window.current_game.spawnWave()
+    , 10000)
+
 
   spawnWave: () ->
     game = window.current_game

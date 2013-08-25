@@ -14,6 +14,17 @@ class Player
       @game.draw()
       @game.spawnMonsters()
       @game.spawnWave()
+      @setPowerUp()
+
+  setPowerUp: () ->
+    window.setInterval(->
+      window.current_game.player.powerUp()
+    , 1000)
+
+  powerUp: () ->
+    player = window.current_game.player
+    player.power = Math.min(player.power + 10, 100)
+    $('.buttons .power').text(window.current_game.player.power)
 
   move: (e) ->
     square = @game.getSquare(e)
@@ -24,12 +35,15 @@ class Player
   inflict: (damage) ->
     console.log("ouch: "+ damage)
     @shield = @shield - damage
-    return if @shield > 0
-    damage = 0 - @shield
-    @shield = 0
-    @health = @health - damage
-    console.log("hp remaining:" + @health)
-    @die() if @health <= 0
+    if @shield > 0
+      $('.buttons .shield').text(@shield)
+    else
+      damage = 0 - @shield
+      @shield = 0
+      $('.buttons .shield').text(@shield)
+      @health = @health - damage
+      $('.buttons .health').text(@health)
+      @die() if @health <= 0
 
   die: ->
     console.log("you snuffed it")
