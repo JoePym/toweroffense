@@ -1,0 +1,1 @@
+#container{position:fixed;top:0;left:0;width:100%;height:100%}#container #map{height:600px;border:10px solid black}#container #map .images{display:none}#container #map.move{cursor:pointer}
