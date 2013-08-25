@@ -26,6 +26,15 @@ class Game
           card.cast()
         else
           card.highlight(this)
+    $('body').on 'click', '.legendarySpell', (e) =>
+      e.preventDefault()
+      cardId = $(e.target).attr('id').replace("card_", '')*1
+      for card in @player.deck when card.id == cardId
+        if card.range == 0 || card.range > @squareList.length
+          card.cast()
+        else
+          card.highlight(this)
+
 
     $('body').on 'click', '#map canvas', (e) =>
       @currentHighlight = null
@@ -104,8 +113,10 @@ class Game
           @ctx.drawImage(images[0],x*50,y*50)
     @monsters = @monsters.filter (monster) -> !monster.dead
     deadMonsters = @monsters.filter (monster) -> monster.dead
-    for monster in @monsters
-      @ctx.drawImage(images[3], (monster.squareObj().x - 1)*50, (monster.squareObj().y - 1)*50)
+    orderedMonsters = @monsters.sort (a,b) ->
+      return if a.difficulty >= b.difficulty then 1 else -1
+    for monster in orderedMonsters
+      @ctx.drawImage(images.siblings("##{monster.name}:first")[0], (monster.squareObj().x - 1)*50, (monster.squareObj().y - 1)*50)
     for deadmonster in deadMonsters
       deadmonster.die()
     @currentHighlight.call() if @currentHighlight

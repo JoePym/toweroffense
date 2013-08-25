@@ -37,11 +37,11 @@ class Card
 
   cast: (e) ->
     square = @player.game.getSquare(e) if e
-    return if $.inArray(square, @validTargets()) == -1 && @range != 0
+    return if $.inArray(square, @validTargets()) == -1 && @range > 0 && @range <= @player.game.squareList.length
     return if @player.power < @cost
     monstersHit = []
+    square = @player.squareObj() unless square
     if @width
-      console.log([square.index, @width])
       max = Math.min(square.index + @width, @player.game.squareList.length)
       min = Math.max(square.index - @width, 1)
       squares = @player.game.squareList[(min - 1)..max]
@@ -72,13 +72,12 @@ class Card
           monster = monstersHit[Math.floor(Math.random()*monstersHit.length)]
           monster.inflict(@rating)
       when "line"
-        console.log(Math.ceil(Math.random()*monstersHit.length))
-        for index in [0..Math.ceil(Math.random()*monstersHit.length)]
-          console.log(index)
-          monster = monstersHit[Math.floor(Math.random()*monstersHit.length)]
-          monster.inflict(@rating)
+        if monstersHit.length > 0
+          for index in [0..Math.ceil(Math.random()*monstersHit.length)]
+            monster = monstersHit[Math.floor(Math.random()*monstersHit.length)]
+            monster.inflict(@rating)
       when 'blast'
         for monster in monstersHit
           monster.inflict(@rating)
-    console.log("Cast #{@name}")
+    @player.game.draw()
 window.Card = Card

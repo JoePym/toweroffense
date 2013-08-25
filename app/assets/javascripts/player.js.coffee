@@ -45,7 +45,6 @@ class Player
       @die() if @health <= 0
 
   die: ->
-    console.log("you snuffed it")
     window.location.reload()
 
   validSquares: (range) ->

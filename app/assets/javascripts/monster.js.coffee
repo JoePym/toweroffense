@@ -18,9 +18,10 @@ class Monster
     @setMoveTimer(this)
 
   setMoveTimer:(monster) ->
-    monster.timer = window.setTimeout ->
-      monster.move(monster)
-    ,(2/monster.moveDistance)*5000
+    if monster.moveDistance > 0
+      monster.timer = window.setTimeout ->
+        monster.move(monster)
+      ,(2/monster.moveDistance)*5000
 
   move:(monster) ->
     unless monster.dead
