@@ -13,7 +13,6 @@ class Monster
     @timer = null
 
   spawn: (square) ->
-    console.log(@name + " spawned!")
     @square = square.index
     @setMoveTimer(this)
 
