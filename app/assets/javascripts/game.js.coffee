@@ -31,6 +31,8 @@ class Game
       target = $(e.target)
       if target.hasClass("legendarySpell")
         target = target.find("a")
+      target.hide()
+      target.siblings(".block").show()
       cardId = target.attr('id').replace("card_", '')*1
       for card in @player.deck when card.id == cardId
         if card.range == 0 || card.range > @squareList.length

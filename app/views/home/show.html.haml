@@ -13,6 +13,7 @@
     .buttons
       - @player.legendary_cards.each do |card|
         .legendarySpell
+          .block{:style => "display:none"}
           = link_to card.name[0].upcase, "#", :id => "card_#{card.id}", :title => card.name
   #map
     .images
