@@ -54,6 +54,11 @@ class Card
         @player.health = @player.health + @rating
       when "shield"
         @player.shield = @rating
+      when "speed"
+        @player.moveDistance = @player.moveDistance + @rating
+      when "slow"
+        for monster in monstersHit
+          monster.moveDistance = Math.min(monster.moveDistance - @rating, 0)
       when 'damage'
         if monstersHit.length > 0
           console.log(monstersHit)

@@ -34,8 +34,10 @@ class Game
         when "move"
           @player.move(e)
         when "spell"
-          @activeCard.cast(e)
+          if @activeCard
+            @activeCard.cast(e)
       @activeCard = null
+      @waiting_click = null
       @draw()
 
   spawnMonsters: () ->

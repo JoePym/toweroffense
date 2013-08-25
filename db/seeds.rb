@@ -19,7 +19,7 @@ Card.create!(rating: 1, width: 50, cost: 0, range: 100, card_type: 'slow', name:
 
 Card.create!(rating: 100, width: 0, cost: 0, range: 0, :card_type => "heal", name: "Nuture", :legendary => true)
 
-Card.create!(rating: 5, width: 0, cost: 0, range: 0, :card_type => "speed", name: "Speed", :legendary => true)
+Card.create!(rating: 3, width: 0, cost: 0, range: 0, :card_type => "speed", name: "Speed", :legendary => true)
 Card.create!(rating: 5, width: 100, cost: 0, range: 100, :card_type => "damage", name: "Earthquake", :legendary => true)
 Card.create!(rating: 20, width: 5, cost: 0, range: 0, :card_type => "blast", name: "Cold Spray", :legendary => true)
 Card.create!(rating: 60, width: 1, cost: 0, range: 5, :card_type => "damage", name: "Odin's Call", :legendary => true)
