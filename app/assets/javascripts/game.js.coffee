@@ -28,7 +28,10 @@ class Game
           card.highlight(this)
     $('body').on 'click', '.legendarySpell', (e) =>
       e.preventDefault()
-      cardId = $(e.target).attr('id').replace("card_", '')*1
+      target = $(e.target)
+      if target.hasClass("legendarySpell")
+        target = target.find("a")
+      cardId = target.attr('id').replace("card_", '')*1
       for card in @player.deck when card.id == cardId
         if card.range == 0 || card.range > @squareList.length
           card.cast()
