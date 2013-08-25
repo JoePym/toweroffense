@@ -28,7 +28,7 @@ Card.create!(rating: 10, width: 0, cost: 0, range: 10, :card_type => "move", nam
 Card.create!(rating: 2, width: 10, cost: 0, range: 100, :card_type => "slow", name: "Slow", :legendary => true)
 
 Card.create!(rating: 1, width: 0, cost: 5, range: 8, card_type: 'damage', name: 'Magic Missile', image: 'arrow.png')
-Card.create!(rating: 2, width: 0, cost: 40, range: 4, card_type: 'blast', name: 'Lightning bolt', image: 'bolt.png')
+Card.create!(rating: 2, width: 0, cost: 40, range: 4, card_type: 'line', name: 'Lightning bolt', image: 'bolt.png')
 Card.create!(rating: 4, width: 1, cost: 80, range: 4, card_type: 'blast', name: 'Fireball', image: 'fireball.png')
 
 Square.destroy_all

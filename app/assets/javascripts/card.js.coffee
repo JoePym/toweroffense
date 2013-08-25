@@ -41,9 +41,12 @@ class Card
     return if @player.power < @cost
     monstersHit = []
     if @width
+      console.log([square.index, @width])
       max = Math.min(square.index + @width, @player.game.squareList.length)
-      min = Math.max(square.index - @width, 0)
-      squares = @player.game.squareList[min..max]
+      min = Math.max(square.index - @width, 1)
+      squares = @player.game.squareList[(min - 1)..max]
+    else if @card_type == "line"
+      squares = @validTargets()
     else
       squares = [square]
     for square in squares
@@ -66,7 +69,12 @@ class Card
           monster.moveDistance = Math.min(monster.moveDistance - @rating, 0)
       when 'damage'
         if monstersHit.length > 0
-          console.log(monstersHit)
+          monster = monstersHit[Math.floor(Math.random()*monstersHit.length)]
+          monster.inflict(@rating)
+      when "line"
+        console.log(Math.ceil(Math.random()*monstersHit.length))
+        for index in [0..Math.ceil(Math.random()*monstersHit.length)]
+          console.log(index)
           monster = monstersHit[Math.floor(Math.random()*monstersHit.length)]
           monster.inflict(@rating)
       when 'blast'

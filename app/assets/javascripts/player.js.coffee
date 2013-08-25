@@ -33,7 +33,6 @@ class Player
     @game.draw()
 
   inflict: (damage) ->
-    console.log("ouch: "+ damage)
     @shield = @shield - damage
     if @shield > 0
       $('.buttons .shield').text(@shield)
