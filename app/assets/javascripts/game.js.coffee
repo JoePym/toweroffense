@@ -15,10 +15,10 @@ class Game
     @wave = 0
 
   setupHandlers: () ->
-    $('body').on 'click', '#move', (e) =>
+    $('#container').on 'click', '#move', (e) =>
       e.preventDefault()
       @moveHighlight()
-    $('body').on 'click', 'a.spell', (e) =>
+    $('#container').on 'click', 'a.spell', (e) =>
       e.preventDefault()
       cardId = $(e.target).parents('a.spell').attr('id').replace("card_", '')*1
       for card in @player.deck when card.id == cardId
@@ -26,7 +26,7 @@ class Game
           card.cast()
         else
           card.highlight(this)
-    $('body').on 'click', '.legendarySpell', (e) =>
+    $('#container').on 'click', '.legendarySpell', (e) =>
       e.preventDefault()
       target = $(e.target)
       if target.hasClass("legendarySpell")
@@ -41,7 +41,7 @@ class Game
           card.highlight(this)
 
 
-    $('body').on 'click', '#map canvas', (e) =>
+    $('#container').on 'click', '#map canvas', (e) =>
       @currentHighlight = null
       e.preventDefault()
       switch @waiting_click
@@ -147,7 +147,7 @@ class Game
     else
       x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft
       y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop
-    x -= @map.offsetLeft
+    x -= (document.width - 600)/2
     y -= @map.offsetTop
     squareIndex = @squares[Math.floor(x/50)][Math.floor(y/50)] if @squares[Math.floor(x/50)]
     if squareIndex
