@@ -24,10 +24,10 @@ class Monster
 
   move:(monster) ->
     game = window.current_game
-    monster.square = monster.square - 1
-    console.log(monster.name + " is moving to " +monster.square)
-    if @square == game.player.square
+    if monster.square - 1 == game.player.square
       monster.attack()
+    else
+      monster.square = monster.square - 1
     game.draw()
     monster.setMoveTimer(monster)
 
