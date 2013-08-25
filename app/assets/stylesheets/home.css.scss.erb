@@ -3,7 +3,7 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 @font-face{
   font-family: oldLondon;
-  src: url('Sansation_Light.ttf'), url('Sansation_Light.eot'); /* IE9 */
+  src: font-url('OldLondon.ttf');
 }
 
 body{
@@ -45,6 +45,10 @@ body{
         float: left;
         position: relative;
         border: 5px solid black;
+        a{
+          font-family: oldLondon;
+          text-decoration:none;
+        }
         .block{
           position: absolute;
           top: 0;
