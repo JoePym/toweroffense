@@ -24,7 +24,7 @@ Card.create!(rating: 5, width: 100, cost: 0, range: 100, :card_type => "blast", 
 Card.create!(rating: 20, width: 5, cost: 0, range: 5, :card_type => "blast", name: "Caldera", :legendary => true)
 Card.create!(rating: 60, width: 0, cost: 0, range: 5, :card_type => "line", name: "Odin's Call", :legendary => true)
 Card.create!(rating: 100, width: 0, cost: 0, range: 5, :card_type => "blast", name: "Nightmare", :legendary => true)
-Card.create!(rating: 500, width: 0, cost: 0, range: 0, :card_type => "boost", name: "Diva", :legendary => true)
+Card.create!(rating: 5, width: 0, cost: 0, range: 0, :card_type => "speed", name: "Dynamo", :legendary => true)
 Card.create!(rating: 2, width: 10, cost: 0, range: 100, :card_type => "slow", name: "Slow", :legendary => true)
 
 Square.destroy_all
