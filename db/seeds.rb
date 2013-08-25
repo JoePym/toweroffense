@@ -5,6 +5,7 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+require 'csv'
 Player.create! unless Player.first
 # Shield:
   #   Played on self, sets your shield to that number
@@ -41,10 +42,33 @@ Card.create!(rating: 2, width: 1, cost: 32, range: 4, card_type: 'damage', name:
 Card.create!(rating: 4, width: 2, cost: 64, range: 2, card_type: 'damage', name: 'Fireball')
 
 Square.destroy_all
-(1..5).each do |index|
-  Player.first.squares.create(:index => index, :y => 4, :x => index)
-  Player.first.squares.create(:index => index + 5, :y => index + 4, :x => 5)
+data = CSV.read(Rails.root.join('db', 'map.csv'))
+index = 0
+y = 0
+x = 0
+dir = data[y][x]
+while dir != 'e'
+  index +=1
+  Player.first.squares.create(:index => index, :y => y + 1, :x => x + 1)
+  raise "Oops" if dir == "0"
+  case dir
+  when "r"
+    x += 1
+  when "d"
+    y += 1
+  when "u"
+    y -= 1
+  when "l"
+    x -= 1
+  end
+  dir = data[y][x]
 end
+
+Monster.destroy_all
+Monster.create(:name => "Goblin", :hp => 1, :damage => 10, :move => 2, :difficulty => 1)
+Monster.create(:name => "Orc", :hp => 2, :damage => 20, :move => 2, :difficulty => 1)
+Monster.create(:name => "Harpy", :hp => 2, :damage => 25, :move => 4, :difficulty => 2)
+Monster.create(:name => "Balrog", :hp => 10, :damage => 80, :move => 4, :difficulty => 10)
 
 
 Player.first.cards << Card.all

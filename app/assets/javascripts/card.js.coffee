@@ -11,6 +11,10 @@ class Card
     @card_type = card.card_type
 
   highlight: (game) ->
+    game.highlight("rgba(200, 0, 0, 0.3)", @validTargets(), "spell")
+    game.activeCard = this
+
+  validTargets: () ->
     currentSquare = @player.squareObj()
     nextSquare = @player.nextSquareObj()
     prevSquare = @player.previousSquareObj()
@@ -20,8 +24,6 @@ class Card
       direction = if prevSquare.x != currentSquare.x then 'y' else 'x'
       targets = targets.concat @squareIterator(direction, prevSquare, prevSquare, false)
     targets = targets.concat [currentSquare]
-    game.highlight("rgba(200, 0, 0, 0.5)", targets, "spell")
-
 
   squareIterator: (method, square, currentSquare, forward) ->
     targets = []
@@ -32,7 +34,10 @@ class Card
       else
         square = @player.game.squareList[square.index - 2]
     targets
-  cast: ->
+
+  cast: (e) ->
+    square = @player.game.getSquare(e) if e
+    return if $.inArray(square, @validTargets()) == -1 && @range != 0
     console.log("Cast spell " + @name)
 
 window.Card = Card

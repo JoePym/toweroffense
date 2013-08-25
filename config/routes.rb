@@ -6,6 +6,7 @@ Toweroffense::Application.routes.draw do
   root 'home#show'
 
   resources :players, :only => :show
+  resources :monsters, :only => :index
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

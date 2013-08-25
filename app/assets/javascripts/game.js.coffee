@@ -9,6 +9,11 @@ class Game
     @setupHandlers()
     @preloaded = false
     @waiting_click = ""
+    @monsters = []
+    @monsterTimer = null
+    @currentHighlight = null
+    @monsterMap = []
+    @wave = 0
 
   setupHandlers: () ->
     $('body').on 'click', '#move', (e) =>
@@ -24,11 +29,48 @@ class Game
           card.highlight(this)
 
     $(@map).on 'click', (e) =>
+      @currentHighlight = null
       e.preventDefault()
       switch @waiting_click
         when "move"
           @player.move(e)
+        when "spell"
+          @activeCard.cast(e)
       @draw()
+
+  spawnMonsters: () ->
+    @monsterTimer = window.setInterval(@spawnWave, 10000)
+
+  spawnWave: () ->
+    game = window.current_game
+    game.wave += 1
+    monsterEntranceSquare = game.squareList[game.squareList.length - 1]
+    console.log(monsterEntranceSquare)
+    bossPresent = false
+    for template in game.monsterTemplates
+      number = 0
+      if template.difficulty > 2 && @wave % 5 == 0
+        unless @bossPresent
+          number = Math.floor(Math.random(1))
+          bossPresent = true if number > 0
+      else if template.difficulty == 2
+        number = Math.ceil(Math.random(3))
+      else
+        number = Math.ceil(Math.random(6))
+      if number > 0
+        for n in [1..number]
+          monster = new Monster(template, game)
+          game.monsters.push(monster)
+          monster.spawn(monsterEntranceSquare)
+          x = monster.squareObj().x
+          y = monster.squareObj().y
+          unless $.isArray(game.monsterMap[x])
+            game.monsterMap[x] = []
+          unless $.isArray(game.monsterMap[x][y])
+            game.monsterMap[x][y] = []
+          game.monsterMap[x][y].push(monster)
+    game.draw()
+
 
   addSquare: (square) ->
     @squareList[square.index - 1] = square
@@ -50,7 +92,6 @@ class Game
         @preloaded = true
         @drawGrid(callback, images)
 
-
   drawGrid: (callback, images) ->
     for y in [(@map.height/50)..0]
       for x in [(@map.width/50)..0]
@@ -61,20 +102,41 @@ class Game
             @ctx.drawImage(images[1],x*50,y*50)
           if @player.square == @squares[x][y]
             @ctx.drawImage(images[2],x*50, y*50)
+          # console.log(@monsterMap[x])
+          if @monsterMap[x] && @monsterMap[x][y]
+            console.log(@monsterMap[x][y])
+            @ctx.fillText(@monsterMap[x][y].name,x*50, y*50)
         else
           @ctx.drawImage(images[0],x*50,y*50)
-    callback.call() if callback
+    @currentHighlight.call() if @currentHighlight
 
   moveHighlight: () ->
-    @highlight("rgba(0, 0, 200, 0.5)", @player.validSquares(@player.moveDistance), "move")
+    @highlight("rgba(100, 200, 100, 0.3)", @player.validSquares(@player.moveDistance), "move")
 
   highlight: (color, toHighlight, eventName) ->
-    @draw =>
+    @currentHighlight = =>
+      @activeCard = null
       $('#map').removeClass()
       $("#map").addClass(eventName)
       @waiting_click = eventName
       for square in toHighlight
         @ctx.fillStyle = color
         @ctx.fillRect((square.x - 1)*50, (square.y-1)*50, 50, 50)
+    @draw()
+
+  getSquare: (e) =>
+    return null unless e
+    if e.pageX || e.pageY
+      x = e.pageX
+      y = e.pageY
+    else
+      x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft
+      y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop
+    x -= @map.offsetLeft
+    y -= @map.offsetTop
+    squareIndex = @squares[Math.floor(x/50)][Math.floor(y/50)] if @squares[Math.floor(x/50)]
+    if squareIndex
+      @squareList[squareIndex - 1]
+
 
 window.Game = Game
